@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Technique Winamax</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  .container {
+    margin-bottom: 20px;
+  }
+  .header {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Test technique Winamax</div>
+    <form id="testForm" action="javascript:void(0);">
+      <input type="number" id="elementCount" name="elementCount" value="1000" min="1" max="1000">
+      <input type="submit" value="send">
+    </form>
+    <p>Number of elements: <span id="numberOfElements">458</span>/1000</p>
+    <p>Time to process: <span id="timeToProcess">processing</span></p>
+    <p class="processing">En cours de traitement</p>
+  </div>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    var socket = io('http://localhost:8080');
+    socket.on("connect", () => {
+      socket.on('processed', message => console.log(message, ' is the message my good man'));
+    });
+  
+    document.getElementById('testForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var elementCountValue = document.getElementById('elementCount').value;
+      console.log('Number of elements:', elementCountValue);
+        socket.emit('enqueue', {
+        count: elementCountValue,
+      });
+    });
+  </script>
+  
+</body>
+</html>
